@@ -4,11 +4,13 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.constant.MessageConst;
 import com.itheima.entity.Result;
 import com.itheima.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
 	@Reference
@@ -16,12 +18,12 @@ public class UserController {
 
 	@RequestMapping("/login")
 	public Result login(String username, String password){
-		System.out.println("oms backend,user:"+username+" ,password:"+password);
+		log.debug("oms backend,user:"+username+" ,password:"+password);
 		if(userService.login(username,password)){
-			System.out.println("login ok!!!");
+			log.debug("login ok!!!");
 			return new Result(true, MessageConst.ACTION_SUCCESS);
 		}else{
-			System.out.println("login fail");
+			log.debug("login fail");
 			return new Result(false,MessageConst.ACTION_FAIL);
 		}
 	}
