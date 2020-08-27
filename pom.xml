@@ -11,6 +11,7 @@
     <modules>
         <module>health_common</module>
         <module>health_interface</module>
+        <module>health_service_provider</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
