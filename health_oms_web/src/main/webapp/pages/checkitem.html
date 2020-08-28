@@ -232,7 +232,51 @@
                 handleEdit() {
                 },
                 //添加
+                /**
+                 * 点击确认，添加检查项
+                 *  步骤：
+                 *      1. 校验数据
+                 *      2. 发送请求，处理结果
+                 *          2.1 发送axios请求， 提交表单中数据到后端
+                 *          2.2 关闭窗口
+                 *          2.3 消息提示
+                 *          2.4 重新查询所有检查项
+                 *
+                 */
                 handleAdd () {
+                    // 1. 校验数据
+                    this.$refs["dataAddForm"].validate((valid)=>{
+                        //如果校验成功
+                        if(valid){
+                            //2. 发送请求，处理结果
+                            //2.1 发送axios请求， 提交表单中数据到后端
+                            axios.post(this.backend_url + "/checkitem/add.do", this.formData).then((res)=>{
+                                //如果发送请求成功
+                                // 2.2 关闭窗口
+                                this.dialogFormVisible = false;
+                                // 2.3 消息提示
+                                if(res.data.flag){
+                                    this.$message({
+                                        message: res.data.message,
+                                        type: "success"
+                                    });
+                                }else{
+                                    this.$message({
+                                        message: res.data.message,
+                                        type: "error"
+                                    });
+                                }
+                                // 2.4 重新查询所有检查项
+                                this.findPage();
+                            }).catch((err)=>{
+                                //如果出现异常，在页面控制台打印错误信息
+                                console.log(err);
+                            });
+                        }else{
+                            //如果校验失败，什么都不做
+                            return false;
+                        }
+                    });
                 },
                 //分页查询
                 findPage() {
