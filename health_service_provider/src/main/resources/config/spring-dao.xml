@@ -25,6 +25,8 @@
         <property name="dataSource" ref="dataSource"/>
         <!--配置别名映射-->
         <property name="typeAliasesPackage" value="com.itheima.pojo"/>
+        <!--配置分页插件-->
+        <property name="configLocation" value="classpath:SqlMapConfig.xml"></property>
     </bean>
     <!--配置mapper文件扫描-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

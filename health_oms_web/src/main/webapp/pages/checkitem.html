@@ -27,7 +27,7 @@
                 <div class="box">
                     <div class="filter-container">
                         <el-input placeholder="项目编码/项目名称" v-model="pagination.queryString" style="width: 200px;" class="filter-item"></el-input>
-                        <el-button @click="findPage()" class="dalfBut">查询</el-button>
+                        <el-button @click="_findPage()" class="dalfBut">查询</el-button>
                         <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
                     </div>
                     <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
@@ -226,6 +226,7 @@
             },
             //钩子函数，VUE对象初始化完成后自动执行
             created() {
+                this.findPage();
             },
             methods: {
                 //编辑
@@ -278,8 +279,36 @@
                         }
                     });
                 },
+                _findPage(){
+                    if( this.pagination.queryString != null && this.pagination.queryString.length != 0){
+                        this.pagination.currentPage = 1;
+                    }
+                    this.findPage();
+                },
                 //分页查询
                 findPage() {
+                    //把分页需要的三个参数封装成一个对象
+                    var param = {
+                        currentPage:this.pagination.currentPage,
+                        pageSize : this.pagination.pageSize,
+                        queryString:this.pagination.queryString
+                    };
+                    //发送分页查询的请求
+                    axios.post(this.backend_url + "/checkitem/findPage.do", param ).then((res)=>{
+                        console.log(res);
+                        //如果查询错误，提示错误信息
+                        if(!res.data.flag){
+                            this.$message({
+                                message: res.data.message,
+                                type: "error"
+                            });
+                        }
+                        //如果查询正确， 表格显示数据，分页数据展示
+                        this.dataList = res.data.data.rows;
+                        this.pagination.total = res.data.data.total;
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
                 },
                 // 重置表单
                 resetForm(formName) {
@@ -304,6 +333,8 @@
                 },
                 //切换页码
                 handleCurrentChange(currentPage) {
+                    this.pagination.currentPage = currentPage;
+                    this.findPage();
                 },
                 // 删除
                 handleDelete(row) {

@@ -2,6 +2,8 @@ package com.itheima.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.constant.MessageConst;
+import com.itheima.entity.PageResult;
+import com.itheima.entity.QueryPageBean;
 import com.itheima.entity.Result;
 import com.itheima.pojo.CheckItem;
 import com.itheima.service.CheckItemService;
@@ -29,5 +31,19 @@ public class CheckItemController {
         checkItemService.add(checkItem);
         log.debug("检查项添加成功！！");
         return new Result(true, MessageConst.ADD_CHECKITEM_SUCCESS);
+    }
+
+    /**
+     * 分页查询
+     *  1.调用Service获取分页结果数据
+     * @param queryPageBean
+     * @return
+     */
+    @RequestMapping("/findPage")
+    public Result findPage(@RequestBody QueryPageBean queryPageBean){
+        log.debug("controller{"+queryPageBean+"}");
+        PageResult pageResult = checkItemService.findPage(queryPageBean);
+        log.debug("检查项分页查询成功!!");
+        return new Result(true, MessageConst.QUERY_CHECKITEM_SUCCESS, pageResult);
     }
 }

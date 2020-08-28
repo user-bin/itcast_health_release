@@ -8,4 +8,13 @@
         ( `code`, `name`, `sex`, `age`, `price`, `type`, `attention`, `remark`)
         VALUES (#{code}, #{name}, #{sex}, #{age}, #{price}, #{type}, #{attention}, #{remark})
     </insert>
+
+    <select id="findByCondition" parameterType="string" resultType="checkitem">
+        select * from t_checkitem
+        <where>
+            <if test="value != null and value.length > 0">
+                code like "%"#{value}"%" or  name like "%"#{value}"%"
+            </if>
+        </where>
+    </select>
 </mapper>

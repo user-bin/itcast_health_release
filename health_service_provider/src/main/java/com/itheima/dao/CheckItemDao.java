@@ -1,5 +1,6 @@
 package com.itheima.dao;
 
+import com.github.pagehelper.Page;
 import com.itheima.pojo.CheckItem;
 
 /**
@@ -7,4 +8,6 @@ import com.itheima.pojo.CheckItem;
  */
 public interface CheckItemDao {
     void add(CheckItem checkItem);
+
+    Page<CheckItem> findByCondition(String queryString);
 }
