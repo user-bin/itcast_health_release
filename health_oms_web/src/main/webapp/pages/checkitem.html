@@ -328,8 +328,29 @@
                     this.dialogFormVisible  = true;
                     this.resetForm('dataAddForm');
                 },
-                // 弹出编辑窗口
+                // 编辑的数据回显
+                /**
+                 * 步骤：
+                 *  1. 获取id
+                 *  2. 弹出窗口
+                 *  3. 清空数据
+                 *  4. 根据id查询检查项, 查询返回，在页面中显示检查项数据
+                 *
+                 * @param row
+                 */
                 handleUpdate(row) {
+                    //1. 获取id
+                    var id = row.id;
+                    //2. 弹出窗口
+                    this.dialogFormVisible4Edit = true;
+                    //3. 清空数据
+                    this.resetForm('dataEditForm');
+                    //4. 根据id查询检查项, 查询返回，在页面中显示检查项数据
+                    axios.get(this.backend_url + "/checkitem/findById.do?id=" + id).then((res)=>{
+                        this.formData = res.data.data;
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
                 },
                 //切换页码
                 handleCurrentChange(currentPage) {

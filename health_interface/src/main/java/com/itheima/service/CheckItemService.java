@@ -22,4 +22,10 @@ public interface CheckItemService {
      * @param id
      */
     void delById(Integer id);
+    /**
+     * 基于ID，获取数据
+     * @param id ID
+     * @return 对象
+     */
+    public CheckItem findById(Integer id);
 }

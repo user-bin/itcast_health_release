@@ -57,4 +57,13 @@ public class CheckItemServiceImpl implements  CheckItemService {
             checkItemDao.delById(id);
         }
     }
+
+    /**
+     * 获取某一数据
+     * @param id 数据ID
+     * @return 对象
+     */
+    public CheckItem findById(Integer id) {
+        return checkItemDao.findById(id);
+    }
 }

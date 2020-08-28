@@ -54,4 +54,12 @@ public class CheckItemController {
         log.debug("检查项删除成功!!");
         return new Result(true, MessageConst.DELETE_CHECKITEM_SUCCESS);
     }
+
+    @RequestMapping("/findById")
+    public Result findById(Integer id){
+        log.debug("CheckItemController：findById:" + id);
+        CheckItem checkItem = checkItemService.findById(id);
+        log.debug("根据id查询检查项成功!!");
+        return new Result(true, MessageConst.QUERY_CHECKITEM_SUCCESS, checkItem);
+    }
 }

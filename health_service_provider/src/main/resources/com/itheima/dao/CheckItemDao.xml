@@ -25,4 +25,9 @@
     <delete id="delById" parameterType="int">
         delete from t_checkitem where id = #{id}
     </delete>
+
+    <!--基于ID获取数据-->
+    <select id="findById" resultType="com.itheima.pojo.CheckItem">
+        SELECT * FROM t_checkitem WHERE id = #{id}
+    </select>
 </mapper>
