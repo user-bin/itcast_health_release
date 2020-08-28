@@ -28,4 +28,10 @@ public interface CheckItemService {
      * @return 对象
      */
     public CheckItem findById(Integer id);
+
+    /**
+     * 更新检查项
+     * @param checkItem
+     */
+    public void edit(CheckItem checkItem);
 }

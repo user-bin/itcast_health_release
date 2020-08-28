@@ -30,4 +30,11 @@
     <select id="findById" resultType="com.itheima.pojo.CheckItem">
         SELECT * FROM t_checkitem WHERE id = #{id}
     </select>
+
+    <!--编辑-->
+    <update id="edit" parameterType="CheckItem">
+        UPDATE t_checkitem
+        set name = #{name},sex = #{sex},code = #{code},age = #{age},price = #{price},type = #{type},attention = #{attention},remark = #{remark}
+        where id = #{id}
+    </update>
 </mapper>

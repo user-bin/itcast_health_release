@@ -21,4 +21,6 @@ public interface CheckItemDao {
      * @return 对象
      */
     public CheckItem findById(Integer id);
+
+    void edit(CheckItem checkItem);
 }

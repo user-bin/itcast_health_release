@@ -10,6 +10,7 @@ import com.itheima.exception.BusinessRuntimeException;
 import com.itheima.pojo.CheckItem;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author 黑马程序员
@@ -65,5 +66,15 @@ public class CheckItemServiceImpl implements  CheckItemService {
      */
     public CheckItem findById(Integer id) {
         return checkItemDao.findById(id);
+    }
+
+    /**
+     * 编辑数据
+     * @param checkItem
+     */
+    @Transactional
+    @Override
+    public void edit(CheckItem checkItem) {
+        checkItemDao.edit(checkItem);
     }
 }

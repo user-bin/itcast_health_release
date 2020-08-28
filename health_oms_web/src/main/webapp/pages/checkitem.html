@@ -230,7 +230,45 @@
             },
             methods: {
                 //编辑
+                /**
+                 * 步骤：
+                 1. 校验数据， 如果校验失败，不提交（return false ）
+                 2. 如果校验成功,提交formData数据（axios）
+                 3. 发送请求完成后
+                 a. 查询所有
+                 b. 消息提示
+                 c. 关闭弹窗
+                 *
+                 */
                 handleEdit() {
+                    //1. 校验数据， 如果校验失败，不提交（return false ）
+                    this.$refs['dataEditForm'].validate((valid)=>{
+                        if(!valid){
+                            return false;
+                        }else{
+                            //2. 如果校验成功,提交formData数据（axios）
+                            axios.post(this.backend_url + "/checkitem/edit.do", this.formData).then((res)=>{
+                                //a. 查询所有
+                                this.findPage();
+                                //b. 消息提示
+                                if(res.data.flag){
+                                    this.$message({
+                                        message: res.data.message,
+                                        type: "success"
+                                    });
+                                }else{
+                                    this.$message({
+                                        message: res.data.message,
+                                        type: "error"
+                                    });
+                                }
+                                //c. 关闭弹窗
+                                this.dialogFormVisible4Edit = false;
+                            }).catch((err)=>{
+                                console.log(err);
+                            });
+                        }
+                    });
                 },
                 //添加
                 /**

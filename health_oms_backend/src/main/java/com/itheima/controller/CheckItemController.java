@@ -62,4 +62,12 @@ public class CheckItemController {
         log.debug("根据id查询检查项成功!!");
         return new Result(true, MessageConst.QUERY_CHECKITEM_SUCCESS, checkItem);
     }
+
+    @RequestMapping("/edit")
+    public Result edit(@RequestBody CheckItem checkItem){
+        log.debug("CheckItemController:edit: " + checkItem);
+        checkItemService.edit(checkItem);
+        log.debug("检查项修改成功!!");
+        return new Result(true, MessageConst.EDIT_CHECKITEM_SUCCESS);
+    }
 }
