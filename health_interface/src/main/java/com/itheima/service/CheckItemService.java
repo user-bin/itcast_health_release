@@ -16,4 +16,10 @@ public interface CheckItemService {
      * @return
      */
     PageResult findPage(QueryPageBean queryPageBean);
+
+    /**
+     * 基于ID，删除检查项
+     * @param id
+     */
+    void delById(Integer id);
 }

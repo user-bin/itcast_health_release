@@ -10,4 +10,8 @@ public interface CheckItemDao {
     void add(CheckItem checkItem);
 
     Page<CheckItem> findByCondition(String queryString);
+
+    long findCountById(Integer id);
+
+    void delById(Integer id);
 }
