@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.CheckGroupDao">
+    <!--新增-->
+    <insert id="add" parameterType="CheckGroup">
+        INSERT INTO t_checkgroup
+        VALUES (null,#{code},#{name},#{helpCode},#{sex},#{remark},#{attention})
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <!--设置检查组和检查项的关联关系-->
+    <insert id="set">
+        INSERT INTO t_checkgroup_checkitem
+        VALUES (#{param1},#{param2})
+    </insert>
+</mapper>

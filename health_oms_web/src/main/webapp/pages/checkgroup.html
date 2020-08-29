@@ -285,7 +285,60 @@
                 handleEdit() {
                 },
                 //添加
+                /**
+                 * 步骤：
+                 *      1.发送axios请求（检查项的基本信息， 选中的检查项的id）
+                 *      2. 请求完成后
+                 *          a. 关闭窗口
+                 *          b. 消息提示
+                 *          c. 重新查询
+                 *      传参：
+                 *              1. 把两个信息封装成一个对象
+                 *                      controller接收：可以声明一个符合格式的实体类
+                 *                                      *** 可以使用map接收
+                 *              2. post方式提交基本信息，选中的检查项id，可以在路径上传
+                 *
+                 */
                 handleAdd () {
+                    //1.发送axios请求
+                    axios.post(this.backend_url + "/checkgroup/add.do?checkitemIds="+this.checkitemIds, this.formData).then((res)=>{
+                        //请求完成后
+                        //a. 关闭窗口
+                        this.dialogFormVisible = false;
+                        //b. 消息提示
+                        this.$message({
+                            message: res.data.message,
+                            type: res.data.flag ?  "success" : "error"
+                        });
+                        //c. 重新查询
+                        this.findPage();
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
+
+
+                    // //封装成一个对象
+                    // var param = {
+                    //     checkGroup: this.formData,
+                    //     checkitemIds: this.checkitemIds
+                    // };
+                    //
+                    // //1.发送axios请求
+                    // axios.post(this.backendUrl + "/checkgroup/add.do", param).then((res)=>{
+                    //     //请求完成后
+                    //     //a. 关闭窗口
+                    //     this.dialogFormVisible = false;
+                    //     //b. 消息提示
+                    //     this.$message({
+                    //         message: res.data.message,
+                    //         type: res.data.flag ?  "success" : "error"
+                    //     });
+                    //     //c. 重新查询
+                    //     this.findPage();
+                    // }).catch((err)=>{
+                    //     console.log(err);
+                    // });
+
                 },
                 //分页查询
                 findPage() {
