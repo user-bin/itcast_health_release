@@ -22,4 +22,11 @@ public interface CheckGroupService {
 	CheckGroup findById(Integer id);
 
 	List<Integer> findCheckItemIdsById(Integer id);
+
+	/**
+	 * 编辑检查组
+	 * @param checkGroup 检查基本数据
+	 * @param checkitemIds 检查项选择列表
+	 */
+	public void edit(CheckGroup checkGroup,Integer[] checkitemIds);
 }

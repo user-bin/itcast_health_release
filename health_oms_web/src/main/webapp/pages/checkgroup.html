@@ -282,7 +282,21 @@
             },
             methods: {
                 //编辑
+                /**
+                 * 1. 发送请求（数据：检查组的数据， 检查项的id）
+                 * 2. 提示窗口，关闭弹框，重新查询
+                 */
                 handleEdit() {
+                    axios.post(this.backend_url+ "/checkgroup/edit.do?checkitemIds="+this.checkitemIds, this.formData).then((res)=>{
+                        this.$message({
+                            message: res.data.message,
+                            type: res.data.flag ? "success": "error"
+                        });
+                        this.dialogFormVisible4Edit = false;
+                        this.findPage();
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
                 },
                 //添加
                 /**

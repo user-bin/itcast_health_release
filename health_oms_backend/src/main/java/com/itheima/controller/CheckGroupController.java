@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -59,5 +60,15 @@ public class CheckGroupController {
         List<Integer> checkItemIds = checkGroupService.findCheckItemIdsById(id);
         log.debug("根据检查组id查询检查项id成功!!");
         return new Result(true, MessageConst.QUERY_CHECKGROUP_SUCCESS,checkItemIds);
+    }
+
+
+    @RequestMapping("/edit")
+    public Result edit(Integer[] checkitemIds ,@RequestBody CheckGroup checkGroup){
+        log.debug("CheckGroupController:edit: " + Arrays.toString(checkitemIds));
+        log.debug("CheckGroupController:edit: " + checkGroup);
+        checkGroupService.edit(checkGroup, checkitemIds);
+        log.debug("检查组修改成功！！！");
+        return new Result(true,MessageConst.EDIT_CHECKGROUP_SUCCESS);
     }
 }

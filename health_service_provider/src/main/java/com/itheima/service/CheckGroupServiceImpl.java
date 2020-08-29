@@ -67,4 +67,25 @@ public class CheckGroupServiceImpl implements CheckGroupService {
     public List<Integer> findCheckItemIdsById(Integer id) {
         return checkGroupDao.findCheckItemIdsById(id);
     }
+
+    /**
+     * 1. 修改检查组
+     * 2. 维护中间表的数据
+     *      2.1 先删除该检查组原来的关系
+     *      2.2 添加新的关系
+     * @param checkitemIds
+     * @param checkGroup
+     */
+    @Override
+    @Transactional
+    public void edit(CheckGroup checkGroup, Integer[] checkitemIds) {
+        //1.修改检查组
+        checkGroupDao.edit(checkGroup);
+        //2.1 先删除该检查组原来的关系
+        checkGroupDao.delRelation(checkGroup.getId());
+        //2.2 添加新的关系
+        if(checkGroup.getId() != null){
+            setRelation(checkGroup.getId(), checkitemIds);
+        }
+    }
 }

@@ -39,4 +39,8 @@ public interface CheckGroupDao {
 	 * @return
 	 */
 	List<Integer> findCheckItemIdsById(Integer id);
+
+	void edit(CheckGroup checkGroup);
+
+	void delRelation(Integer id);
 }
