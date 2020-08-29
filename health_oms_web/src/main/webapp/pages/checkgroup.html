@@ -88,7 +88,7 @@
                     </div>
                     <!-- 新增标签弹层 -->
                     <div class="add-form">
-                        <el-dialog title="新增检查组" :visible.sync="dialogFormVisible">
+                        <el-dialog title="新增检查组" :visible.sync="dialogFormVisible" v-if="dialogFormVisible">
                             <template>
                                 <el-tabs v-model="activeName" type="card">
                                     <el-tab-pane label="基本信息" name="first">
@@ -274,7 +274,8 @@
                 tableData:[],//新增和编辑表单中对应的检查项列表数据
                 checkitemIds:[],//新增和编辑表单中检查项对应的复选框，基于双向绑定可以进行回显和数据提交
                 dialogFormVisible: false,//控制添加窗口显示/隐藏
-                dialogFormVisible4Edit:false//控制编辑窗口显示/隐藏
+                dialogFormVisible4Edit:false,//控制编辑窗口显示/隐藏
+                backend_url: "http://localhost:82"
             },
             created() {
                 this.findPage();
@@ -291,9 +292,34 @@
                 },
                 // 重置表单
                 resetForm() {
+                    //清除表单数据
+                    this.formData = {};
+                    //每次打开显示第一个标签页
+                    this.activeName = "first";
+                    //清除选中的检查项
+                    this.checkitemIds = [];
                 },
                 // 弹出添加窗口
+                /**
+                 * 点击新增按钮，执行此方法
+                 * 步骤：
+                 *  1. 弹出窗口
+                 *  2. 清空表单数据
+                 *  3. 查询所有的检查项， 在第一个标签页显示
+                 *
+                 */
                 handleCreate() {
+                    //1. 弹出窗口
+                    this.dialogFormVisible = true;
+                    //2. 清空表单数据
+                    this.resetForm();
+                    //3. 查询所有的检查项， 在第一个标签页显示
+                    axios.get(this.backend_url +"/checkitem/findAll.do").then((res)=>{
+                        //把查询到的数据赋值给tableData，在第一个标签显示
+                        this.tableData = res.data.data;
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
                 },
                 // 弹出编辑窗口
                 handleUpdate(row) {

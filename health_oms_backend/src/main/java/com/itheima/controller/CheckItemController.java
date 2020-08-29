@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author 黑马程序员
  * @Company http://www.ithiema.com
@@ -69,5 +71,13 @@ public class CheckItemController {
         checkItemService.edit(checkItem);
         log.debug("检查项修改成功!!");
         return new Result(true, MessageConst.EDIT_CHECKITEM_SUCCESS);
+    }
+
+    @RequestMapping("/findAll")
+    public Result findAll(){
+        log.debug("findAll");
+        List<CheckItem> checkItemList = checkItemService.findAll();
+        log.debug("checkItemList:" + checkItemList);
+        return new Result(true,MessageConst.QUERY_CHECKITEM_SUCCESS, checkItemList);
     }
 }

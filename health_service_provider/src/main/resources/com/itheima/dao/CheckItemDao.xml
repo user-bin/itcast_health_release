@@ -37,4 +37,8 @@
         set name = #{name},sex = #{sex},code = #{code},age = #{age},price = #{price},type = #{type},attention = #{attention},remark = #{remark}
         where id = #{id}
     </update>
+
+    <select id="findAll" resultType="checkitem">
+        select * from t_checkitem
+    </select>
 </mapper>
