@@ -15,4 +15,11 @@
         INSERT INTO t_checkgroup_checkitem
         VALUES (#{param1},#{param2})
     </insert>
+
+    <select id="findByCondition" resultType="checkGroup">
+        SELECT * FROM t_checkgroup
+        <if test=" queryString!=null and queryString.length > 0">
+            WHERE code LIKE "%"#{queryString}"%" or name LIKE "%"#{queryString}"%" or helpCode like "%"#{queryString}"%"
+        </if>
+    </select>
 </mapper>

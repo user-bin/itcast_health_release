@@ -55,7 +55,7 @@
                 <div class="box">
                     <div class="filter-container">
                         <el-input placeholder="编码/名称/助记码" v-model="pagination.queryString" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"></el-input>
-                        <el-button @click="findPage()" class="dalfBut">查询</el-button>
+                        <el-button @click="_findPage()" class="dalfBut">查询</el-button>
                         <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
                     </div>
                     <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
@@ -340,8 +340,28 @@
                     // });
 
                 },
+                _findPage(){
+                    //如果有条件，则查询第一页
+                    if(this.pagination.queryString != null && this.pagination.queryString.length > 0){
+                        this.pagination.currentPage = 1;
+                    }
+                    this.findPage();
+                },
                 //分页查询
                 findPage() {
+                    //声明分页参数对象
+                    var param = {
+                        currentPage: this.pagination.currentPage,
+                        pageSize : this.pagination.pageSize,
+                        queryString: this.pagination.queryString
+                    };
+                    //发送请求，分页查询数据， 查询完成后，表格中展示数据
+                    axios.post(this.backend_url + "/checkgroup/findPage.do" , param).then((res)=>{
+                        this.dataList = res.data.data.rows;
+                        this.pagination.total = res.data.data.total;
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
                 },
                 // 重置表单
                 resetForm() {
@@ -379,6 +399,8 @@
                 },
                 //切换页码
                 handleCurrentChange(currentPage) {
+                    this.pagination.currentPage = currentPage;
+                    this.findPage();
                 },
                 // 删除
                 handleDelete(row) {
