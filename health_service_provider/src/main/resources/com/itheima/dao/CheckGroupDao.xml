@@ -22,4 +22,11 @@
             WHERE code LIKE "%"#{queryString}"%" or name LIKE "%"#{queryString}"%" or helpCode like "%"#{queryString}"%"
         </if>
     </select>
+
+    <select id="findById" resultType="checkGroup">
+        select * from t_checkgroup where id = #{id}
+    </select>
+    <select id="findCheckItemIdsById" resultType="int">
+        select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{id}
+    </select>
 </mapper>

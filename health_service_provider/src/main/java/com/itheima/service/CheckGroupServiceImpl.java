@@ -10,6 +10,8 @@ import com.itheima.pojo.CheckGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 检查组服务
  */
@@ -55,5 +57,14 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         PageHelper.startPage(queryPageBean.getCurrentPage(), queryPageBean.getPageSize());
         Page<CheckGroup> page = checkGroupDao.findByCondition(queryPageBean.getQueryString());
         return new PageResult(page.getTotal(), page);
+    }
+
+    @Override
+    public CheckGroup findById(Integer id) {
+        return checkGroupDao.findById(id);
+    }
+    @Override
+    public List<Integer> findCheckItemIdsById(Integer id) {
+        return checkGroupDao.findCheckItemIdsById(id);
     }
 }

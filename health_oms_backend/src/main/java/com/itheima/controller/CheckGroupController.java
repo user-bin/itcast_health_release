@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author 黑马程序员
  * @Company http://www.ithiema.com
@@ -42,5 +44,20 @@ public class CheckGroupController {
         PageResult pageResult = checkGroupService.findPage(queryPageBean);
         log.debug("检查组分页查询成功!!");
         return new Result(true, MessageConst.QUERY_CHECKGROUP_SUCCESS, pageResult);
+    }
+
+    @RequestMapping("/findById")
+    public Result findById(Integer id){
+        log.debug("CheckGroupController:findById: " + id);
+        CheckGroup checkGroup = checkGroupService.findById(id);
+        log.debug("检查组查询成功!!");
+        return new Result(true, MessageConst.QUERY_CHECKGROUP_SUCCESS,checkGroup);
+    }
+    @RequestMapping("/findCheckItemIdsById")
+    public Result findCheckItemIdsById(Integer id){
+        log.debug("CheckGroupController:findCheckItemIdsById: " + id);
+        List<Integer> checkItemIds = checkGroupService.findCheckItemIdsById(id);
+        log.debug("根据检查组id查询检查项id成功!!");
+        return new Result(true, MessageConst.QUERY_CHECKGROUP_SUCCESS,checkItemIds);
     }
 }

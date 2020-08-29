@@ -172,7 +172,7 @@
 
                     <!-- 编辑标签弹层 -->
                     <div class="add-form">
-                        <el-dialog title="编辑检查组" :visible.sync="dialogFormVisible4Edit">
+                        <el-dialog title="编辑检查组" :visible.sync="dialogFormVisible4Edit" v-if="dialogFormVisible4Edit">
                             <template>
                                 <el-tabs v-model="activeName" type="card">
                                     <el-tab-pane label="基本信息" name="first">
@@ -394,8 +394,40 @@
                         console.log(err);
                     });
                 },
-                // 弹出编辑窗口
+                // 编辑窗口
+                /**
+                 * 1. 弹出窗口
+                 * 2. 重置表单
+                 * 3. 数据回显
+                 *         回显检查组基本数据
+                 *         回显所有的检查项数据
+                 *         回显检查组所关联的检查项
+                 * @param row
+                 */
                 handleUpdate(row) {
+                    //1. 弹框
+                    this.dialogFormVisible4Edit = true;
+                    //2. 重置表单
+                    this.resetForm();
+                    //3. 数据回显
+                    //3.1 回显检查组基本数据
+                    axios.get(this.backend_url +"/checkgroup/findById.do?id="+row.id).then((res)=>{
+                        this.formData = res.data.data;
+                        //3.2 回显所有的检查项数据
+                        axios.get(this.backend_url+"/checkitem/findAll.do").then((res)=>{
+                            this.tableData = res.data.data;
+                            //3.3 回显检查组所关联的检查项
+                            axios.get(this.backend_url +"/checkgroup/findCheckItemIdsById.do?id="+row.id).then((res)=>{
+                                this.checkitemIds = res.data.data;
+                            }).catch((err)=>{
+                                console.log(err);
+                            });
+                        }).catch((err)=>{
+                            console.log(err);
+                        });
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
                 },
                 //切换页码
                 handleCurrentChange(currentPage) {

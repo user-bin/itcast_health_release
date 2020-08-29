@@ -4,6 +4,8 @@ import com.itheima.entity.PageResult;
 import com.itheima.entity.QueryPageBean;
 import com.itheima.pojo.CheckGroup;
 
+import java.util.List;
+
 /**
  * 检查组服务接口
  */
@@ -16,4 +18,8 @@ public interface CheckGroupService {
 	public void add(CheckGroup checkGroup, Integer[] checkItemIds);
 
 	PageResult findPage(QueryPageBean queryPageBean);
+
+	CheckGroup findById(Integer id);
+
+	List<Integer> findCheckItemIdsById(Integer id);
 }

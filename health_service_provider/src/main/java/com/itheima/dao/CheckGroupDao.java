@@ -4,6 +4,8 @@ import com.github.pagehelper.Page;
 import com.itheima.pojo.CheckGroup;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 持久层Dao接口
  */
@@ -24,4 +26,17 @@ public interface CheckGroupDao {
 	 * @return
 	 */
 	Page<CheckGroup> findByCondition(@Param("queryString") String queryString);
+
+	/**
+	 * 根据id查询
+	 * @param id
+	 * @return
+	 */
+	CheckGroup findById(Integer id);
+	/**
+	 * 根据检查组id查询相关的检查项id
+	 * @param id
+	 * @return
+	 */
+	List<Integer> findCheckItemIdsById(Integer id);
 }
