@@ -3,12 +3,14 @@ package com.itheima.service;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.itheima.constant.RedisConst;
 import com.itheima.dao.SetmealDao;
 import com.itheima.entity.PageResult;
 import com.itheima.entity.QueryPageBean;
 import com.itheima.pojo.Setmeal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.JedisPool;
 
 /**
  * @author 黑马程序员
@@ -20,6 +22,9 @@ public class SetmealServiceImpl implements SetmealService {
     @Autowired
     SetmealDao setmealDao;
 
+    @Autowired
+    JedisPool jedisPool;
+
     @Transactional
     @Override
     public void add(Setmeal setmeal, Integer[] checkgroupIds) {
@@ -27,6 +32,9 @@ public class SetmealServiceImpl implements SetmealService {
         setmealDao.add(setmeal);
         //2. 维护套餐和检查组的关系
         setRelation(setmeal, checkgroupIds);
+
+        jedisPool.getResource().srem(RedisConst.SETMEAL_PIC_RESOURCES, setmeal.getImg());
+
     }
 
     /**
