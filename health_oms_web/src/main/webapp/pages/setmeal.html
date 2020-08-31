@@ -17,6 +17,7 @@
         <script src="../js/vue.js"></script>
         <script src="../plugins/elementui/index.js"></script>
         <script src="../js/axios-0.18.0.js"></script>
+        <script src="https://unpkg.com/qiniu-js@2.5.4/dist/qiniu.min.js"></script>
         <style>
             .avatar-uploader .el-upload {
                 border: 1px dashed #d9d9d9;
@@ -166,8 +167,13 @@
                                                                 :auto-upload="autoUpload"
                                                                 :show-file-list="false"
                                                                 :before-upload="beforeAvatarUpload">
+                                                            <!--如果图片有路径，显示图片， 否则显示其他-->
                                                             <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                                            <div v-else>
+                                                                <!-- 如果 进度值不为0 ，显示进度条， 如果为0 ，显示其他-->
+                                                                <el-progress v-if="percent" :width="176" type="circle" :percentage="percent"></el-progress>
+                                                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                                            </div>
                                                         </el-upload>
                                                     </el-form-item>
                                                 </el-col>
@@ -243,29 +249,127 @@
                 tableData:[],//添加表单窗口中检查组列表数据
                 checkgroupIds:[],//添加表单窗口中检查组复选框对应id
                 dialogFormVisible: false,//控制添加窗口显示/隐藏
-                backend_url:"http://localhost:82"
+                backend_url:"http://localhost:82",
+                qiniu_domain_url: "http://qfxjrk1lr.hd-bkt.clouddn.com/", // 七牛测试域名
+                percent: 0 // 进度值
             },
             created() {
                 this.findPage();
             },
             methods: {
-                //图片类型判断通过后，开始上传图片
-                upload_img(file) {
-
-                },
                 //上传图片之前执行
                 beforeAvatarUpload(file) {
-				  const isJPG = file.type === 'image/jpeg';
-				  const isLt2M = file.size / 1024 / 1024 < 2;
-				  if (!isJPG) {
-					this.$message.error('上传套餐图片只能是 JPG 格式!');
-				  }
-				  if (!isLt2M) {
-					this.$message.error('上传套餐图片大小不能超过 2MB!');
-				  }
-				  if(isJPG && isLt2M){
-				      this.upload_img(file);
-                  }
+                    /**
+                     * ==  只判断值   "123" ===  123（true）
+                     * ===  既判断类型也判断值   "123" ===  123  (false)
+                     */
+                        // 如果file.type 不能获取文件类型，请采用下面的方法
+                        // const isJPG = file.type === 'image/jpeg';
+                        //获取文件的类型
+                        //获取文件名
+                    let fileName = file.name;
+                    //截取 文件后缀名:从最后一个 [.]  的索引开始截取
+                    let extendName = fileName.substr( fileName.lastIndexOf("."));
+                    console.log(extendName);
+                    const isJPG = extendName === ".jpg" || extendName === ".jpeg" || extendName === ".png";
+                    const isLt2M = file.size / 1024 / 1024 < 2;
+                    if (!isJPG) {
+                        this.$message.error('上传套餐图片只能是 JPG 格式!');
+                    }
+                    if (!isLt2M) {
+                        this.$message.error('上传套餐图片大小不能超过 2MB!');
+                    }
+                    if(isJPG && isLt2M){
+                        this.upload_img(file);
+                    }
+                },
+                //图片类型判断通过后，开始上传图片
+                /**
+                 * 步骤
+                 *  0. 引入依赖和js文件
+                 *  1. 获取token
+                 *  2. 生成唯一的文件名
+                 *  3. 开始上传图片到七牛云
+                 *  4. 解析上传结果
+                 */
+                upload_img(file){
+                    //清除图片路径， 解决 二次上传图片看不到 进度条的问题
+                    this.imageUrl = "";
+                    //获取token
+                    axios.get(this.backend_url + "/setmeal/getToken.do").then((res) => {
+                        console.log(res);
+                        let token = res.data.data;
+                        //生成唯一的文件名称
+                        //uuid
+                        let uuid = this.generateUUID();
+                        //获取文件名
+                        let filename = file.name;
+                        //截取后缀名:   jpg  png
+                        let extendName = filename.substr(filename.lastIndexOf("."));
+                        //唯一的文件名称
+                        let serverName = uuid + extendName;
+                        console.log(serverName);
+                        //开始上传，对上传的结果进行解析
+                        //配置七牛的参数
+                        const config = {
+                            useCdnDomain: true,
+                            region: qiniu.region.z0
+                        };
+                        const putExtra = {
+                            fname: "",
+                            mimeType: ""
+                        };
+                        let observable = qiniu.upload(file, serverName, token, putExtra, config)
+                        //对上传的过程和结果解析
+                        observable.subscribe({
+                            next:(res)=>{
+                                // 过程的解析
+                                console.log(res);
+                                //Math.floor  向上取整
+                                this.percent = Math.floor(res.total.percent);
+                            },
+                            error:(err)=>{
+                                //失败后的回调
+                                this.$message({
+                                    message:'上传图片失败',
+                                    type: "error"
+                                });
+                            },
+                            complete:(res)=>{
+                                this.$message({
+                                    message:'上传图片成功',
+                                    type: "success"
+                                });
+                                this.imageUrl = this.qiniu_domain_url + serverName+"_itcast";
+                                //清除进度值为0, 为了解决 二次上传进度条 默认 100% 的问题
+                                this.percent = 0;
+                            }
+                        });
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                },
+                //生成uuid
+                generateUUID() {
+                    var d = new Date().getTime();
+                    if (window.performance && typeof window.performance.now === "function") {
+                        d += performance.now(); //use high-precision timer if available
+                    }
+                    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        var r = (d + Math.random() * 16) % 16 | 0;
+                        d = Math.floor(d / 16);
+                        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                    });
+                    return uuid;
+                },// 返回 类似 20160102 格式的字符串
+                formatDate: function () {
+                    var date = new Date();
+                    var y = date.getFullYear();
+                    var m = date.getMonth() + 1;
+                    if (m < 10) m = "0" + m;
+                    var d = date.getDate();
+                    if (d < 10) d = "0" + date.getDate();
+                    return y + "" + m + "" + d
                 },
                 //添加,
                 handleAdd () {
