@@ -1,5 +1,6 @@
 package com.itheima.dao;
 
+import com.github.pagehelper.Page;
 import com.itheima.pojo.Setmeal;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,4 +13,6 @@ public interface SetmealDao {
     void add(Setmeal setmeal);
 
     void setRelation(@Param("setmeal_id") Integer setmealId,@Param("checkgroup_id") Integer checkgroupId);
+
+    Page<Setmeal> findByCondition(String queryString);
 }

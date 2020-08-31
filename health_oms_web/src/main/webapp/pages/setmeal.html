@@ -396,8 +396,26 @@
                         this.findPage();
                     })
                 },
+                _findPage(){
+                    if( this.pagination.queryString != null && this.pagination.queryString.length != 0){
+                        this.pagination.currentPage = 1;
+                    }
+                    this.findPage();
+                },
                 //分页查询
                 findPage() {
+                    //分页参数
+                    var param = {
+                        currentPage:this.pagination.currentPage,//页码
+                        pageSize:this.pagination.pageSize,//每页显示的记录数
+                        queryString:this.pagination.queryString//查询条件
+                    };
+                    //请求后台
+                    axios.post(this.backend_url + "/setmeal/findPage.do",param).then((res)=> {
+                        //为模型数据赋值，基于VUE的双向绑定展示到页面
+                        this.dataList = res.data.data.rows;
+                        this.pagination.total = res.data.data.total;
+                    });
                 },
                 // 重置表单
                 resetForm() {
@@ -430,6 +448,9 @@
                 },
                 //切换页码
                 handleCurrentChange(currentPage) {
+                    //currentPage为切换后的页码
+                    this.pagination.currentPage = currentPage;
+                    this.findPage();
                 }
             }
         })
