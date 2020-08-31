@@ -1,11 +1,17 @@
 package com.itheima.controller;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.constant.MessageConst;
 import com.itheima.entity.Result;
+import com.itheima.pojo.Setmeal;
+import com.itheima.service.SetmealService;
 import com.qiniu.util.Auth;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
 
 /**
  * @author 黑马程序员
@@ -18,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class SetmealController {
 
 
+    @Reference
+    SetmealService setmealService;
+
     @RequestMapping("/getToken")
     public Result getToken(){
         log.debug("获取token");
@@ -28,5 +37,14 @@ public class SetmealController {
         String uploadToken = auth.uploadToken(bucket);
         log.debug("获取token成功：" + uploadToken);
         return new Result(true, MessageConst.GET_QINIU_TOKEN_SUCCESS, uploadToken);
+    }
+
+    @RequestMapping("/add")
+    public Result add(@RequestBody Setmeal setmeal, Integer[] checkgroupIds){
+        log.debug("SetmealControlller:add:" + setmeal);
+        log.debug("SetmealControlller:add:" + Arrays.toString(checkgroupIds));
+        setmealService.add(setmeal, checkgroupIds);
+        log.debug("套餐添加成功！！");
+        return  new Result(true ,MessageConst.ADD_SETMEAL_SUCCESS);
     }
 }

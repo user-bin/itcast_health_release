@@ -343,6 +343,7 @@
                                 this.imageUrl = this.qiniu_domain_url + serverName+"_itcast";
                                 //清除进度值为0, 为了解决 二次上传进度条 默认 100% 的问题
                                 this.percent = 0;
+                                this.formData.img = serverName;
                             }
                         });
                     }).catch((err) => {
@@ -371,8 +372,29 @@
                     if (d < 10) d = "0" + date.getDate();
                     return y + "" + m + "" + d
                 },
-                //添加,
+                //添加
+                /**
+                 * 点击确认按钮，执行的方法
+                 * 步骤：
+                 *  1. 发送请求，提交套餐基本信息和选中的检查组信息
+                 *  2. 请求完成后
+                 *      2.1 消息提示
+                 *      2.2 关闭窗口
+                 *      2.3 重新查询
+                 *
+                 */
                 handleAdd () {
+                    axios.post(
+                        this.backend_url+"/setmeal/add.do?checkgroupIds=" + this.checkgroupIds,
+                        this.formData
+                    ).then((res)=> {
+                        this.dialogFormVisible = false;
+                        this.$message({
+                            message: res.data.message,
+                            type: res.data.flag ? "success":"error"
+                        });
+                        this.findPage();
+                    })
                 },
                 //分页查询
                 findPage() {
