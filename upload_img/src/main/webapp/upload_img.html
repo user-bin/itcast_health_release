@@ -38,7 +38,10 @@
             :show-file-list="false"
             :before-upload="beforeAvatarUpload">
         <img v-if="imageUrl" :src="imageUrl" class="avatar" width="237" height="237">
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        <div v-else>
+            <el-progress v-if="percent" :width="237" type="circle" :percentage="percent"></el-progress>
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </div>
     </el-upload>
 </div>
 
@@ -49,7 +52,8 @@
         el:"#app",
         data:{
             imageUrl: "",
-            domain: "http://qfxjrk1lr.hd-bkt.clouddn.com"
+            domain: "http://qfxjrk1lr.hd-bkt.clouddn.com",
+            percent:0
         },
         methods:{
             beforeAvatarUpload(file){
@@ -85,6 +89,7 @@
                         // 上传的过程的回调
                         next:(res)=>{
                             console.log(res);
+                            this.percent = Math.floor(res.total.percent);
                         },
                         //执行失败时的回调
                         error:(err)=>{
@@ -102,7 +107,7 @@
                                 message: "上传成功！"
                             });
                             //图片回显
-                            this.imageUrl = this.domain + "/" + serverName;
+                            this.imageUrl = this.domain + "/" + serverName+"-itcast";
                             console.log(this.imageUrl);
                         }
                     });
