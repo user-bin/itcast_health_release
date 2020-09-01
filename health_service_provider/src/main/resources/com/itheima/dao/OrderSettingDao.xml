@@ -19,4 +19,9 @@
         set number = #{number}
         where orderDate = #{orderDate}
     </update>
+
+    <select id="findByMonth" resultType="ordersetting">
+        select * from t_ordersetting where
+        orderDate BETWEEN #{param1} and #{param2}
+    </select>
 </mapper>

@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author 黑马程序员
@@ -61,5 +59,47 @@ public class OrderSettingController {
         }
 
         return new Result(true,MessageConst.IMPORT_ORDERSETTING_SUCCESS);
+    }
+
+    /**
+     * //获取到的json
+     * [
+     *  {id:1 , orderDate: 2020-02-26, reservations : 1 , number: 500},
+     *  {id:2 , orderDate: 2020-02-27, reservations : 1 , number: 500},
+     *  {id:3 , orderDate: 2020-02-28, reservations : 1 , number: 500},
+     * ]
+     *
+     * 前端需要
+     *  [
+     { date: 21, number: 120, reservations: 1 },
+     { date: 13, number: 120, reservations: 1 },
+     { date: 24, number: 120, reservations: 120 }
+     ];
+     *
+     * @param date
+     * @return
+     */
+    @RequestMapping("/findByMonth")
+    public Result findByMonth(String date){
+        log.debug("OrderSettingController: findByDate: " + date);
+        List<OrderSetting> orderSettingList = orderSettingService.findByMonth(date);
+        // 需要把数据转换为前端想要的数据
+        List<Map<String,Object>> mapList = new ArrayList<>();
+        for (OrderSetting orderSetting : orderSettingList) {
+            //每一个orderSetting 对应一个Map集合
+            Map<String,Object> map = new HashMap<>();
+            //
+            Date orderDate = orderSetting.getOrderDate();
+            //把日期类型 获取里面的天
+            SimpleDateFormat sdf = new SimpleDateFormat("dd");
+            String orderDateStr = sdf.format(orderDate);
+            map.put("date", orderDateStr);
+            map.put("number", orderSetting.getNumber());
+            map.put("reservations", orderSetting.getReservations());
+            //把map添加到集合中
+            mapList.add(map);
+        }
+        log.debug(orderSettingList.toString());
+        return new Result(true,MessageConst.GET_ORDERSETTING_SUCCESS , mapList);
     }
 }
