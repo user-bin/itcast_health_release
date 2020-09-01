@@ -8,6 +8,7 @@ import com.itheima.pojo.OrderSetting;
 import com.itheima.service.OrderSettingService;
 import com.itheima.utils.POIUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -101,5 +102,13 @@ public class OrderSettingController {
         }
         log.debug(orderSettingList.toString());
         return new Result(true,MessageConst.GET_ORDERSETTING_SUCCESS , mapList);
+    }
+
+    @RequestMapping("/saveOrEdit")
+    public Result saveOrEdit(@RequestBody OrderSetting orderSetting){
+        log.debug("OrderSettingController: saveOrEdit:" + orderSetting);
+        orderSettingService.saveOrEdit(orderSetting);
+        log.debug("基于日历修改预约设置信息成功！！！");
+        return new Result(true,"基于日历修改预约设置信息成功！！");
     }
 }

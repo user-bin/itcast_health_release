@@ -139,8 +139,42 @@
                 this.initData(null);
             },
             methods: {
-				//预约设置
+                //预约设置
+                //给某一天进行预约设置
                 handleOrderSet(day){
+                    console.log(day);
+                    /**
+                     *    星号：重复零次或者多次
+                     *    + ： 重复一次或者多次
+                     *    ? : 一次或者零次
+                     *
+                     */
+                    this.$prompt('请输入可预约人数', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        inputPattern: /^[0-9]*[1-9][0-9]*$/,
+                        inputErrorMessage: '请输入数字'
+                    }).then(({ value }) => {
+                        // 提交数据
+                        // 日期
+                        // 可预约人数
+                        //封装参数对象
+                        var param = {
+                            orderDate: this.formatDate(day.getFullYear(), day.getMonth() + 1 ,day.getDate()),
+                            number: value
+                        };
+                        axios.post(this.backend_url + "/ordersetting/saveOrEdit.do", param).then((res)=>{
+                            //重新查询
+                            this.initData(this.formatDate(this.currentYear , this.currentMonth, 1));
+                        }).catch((err)=>{
+                            console.log(err);
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '取消输入'
+                        });
+                    });
                 },
 				//上传之前进行文件格式校验
                 beforeUpload(file){
