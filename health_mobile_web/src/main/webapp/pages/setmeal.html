@@ -25,7 +25,7 @@
             <ul class="list">
                 <li class="list-item" v-for="setmeal in setmealList">
                     <a class="link-page" :href="'setmeal_detail.html?id='+setmeal.id">
-                    <img class="img-object f-left" :src="'http://pqjroc654.bkt.clouddn.com/'+setmeal.img" alt="">
+                    <img class="img-object f-left" :src="qiniu_domain_url+setmeal.img" alt="">
                     <div class="item-body">
                         <h4 class="ellipsis item-title">{{setmeal.name}}</h4>
                         <p class="ellipsis-more item-desc">{{setmeal.remark}}</p>
@@ -48,10 +48,12 @@
     var vue = new Vue({
         el:'#app',
         data:{
-            setmealList:[]
+            setmealList:[],
+            backend_url: "http://localhost:85",
+            qiniu_domain_url: "http://qfxjrk1lr.hd-bkt.clouddn.com/"
         },
         mounted (){
-            axios.post("/setmeal/getSetmeal.do").then((response)=>{
+            axios.post(this.backend_url + "/setmeal/getSetmeal.do").then((response)=>{
                 if(response.data.flag){
                     this.setmealList = response.data.data;
                 }
