@@ -45,4 +45,11 @@ public interface CheckGroupDao {
 	void delRelation(Integer id);
 
     List<CheckGroup> findAll();
+
+	/**
+	 * 根据套餐id查询对应的检查组
+	 * @param setmealId
+	 * @return
+	 */
+	List<CheckGroup> findCheckGroupListBySetmealId(Integer setmealId);
 }

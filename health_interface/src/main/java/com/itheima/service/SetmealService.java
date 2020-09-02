@@ -17,4 +17,11 @@ public interface SetmealService {
     PageResult findPage(QueryPageBean queryPageBean);
 
     List<Setmeal> findAll();
+
+    /**
+     * 基于ID，获取套餐详情
+     * @param id
+     * @return
+     */
+    public Setmeal findDetailById(Integer id);
 }

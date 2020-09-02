@@ -27,4 +27,11 @@ public interface CheckItemDao {
     void edit(CheckItem checkItem);
 
     List<CheckItem> findAll();
+
+    /**
+     * 根据检查组id查询检查项
+     * @param checkgroupId
+     * @return
+     */
+    List<CheckItem> findCheckItemListByCheckGroupId(Integer checkgroupId);
 }

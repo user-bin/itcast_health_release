@@ -24,4 +24,44 @@
     <select id="findAll" resultType="setmeal">
         select * from t_setmeal
     </select>
+
+    <!--映射基本字段-->
+    <resultMap id="baseMap" type="setmeal">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="code" property="code"></result>
+        <result column="helpCode" property="helpCode"></result>
+        <result column="sex" property="sex"></result>
+        <result column="age" property="age"></result>
+        <result column="remark" property="remark"></result>
+        <result column="price" property="price"></result>
+        <result column="attention" property="attention"></result>
+        <result column="img" property="img"></result>
+    </resultMap>
+
+    <resultMap id="findDetailsByIdMap" type="setmeal" extends="baseMap">
+        <!--一对多关联-->
+        <!--
+                  fetchType="lazy": 懒加载
+                  property： 对应属性名
+                  column： 对应列名（已知条件的）（一定是sql的结果集中存在的列）
+                  ofType: 属性的泛型
+                  select： 可以sql语句，方法的唯一标识（全名称=包名+类名 + 方法名）
+                          //根据套餐id查询检查组的数据
+                          List<CheckGroup> com.itheima.dao.CheckGroupDao.findCheckGroupListBySetmealId(Integer setmealId)
+
+              -->
+        <collection
+                property="checkGroups"
+                column="id"
+                ofType="checkGroup"
+                select="com.itheima.dao.CheckGroupDao.findCheckGroupListBySetmealId"></collection>
+    </resultMap>
+
+    <!--
+                如果属性名与列名不一致，使用结果映射
+        -->
+    <select id="findDetailsById" parameterType="int" resultMap="findDetailsByIdMap">
+        select * from t_setmeal where id = #{id}
+    </select>
 </mapper>

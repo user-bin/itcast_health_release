@@ -83,7 +83,9 @@
         el:'#app',
         data:{
             imgUrl:null,//套餐对应的图片链接
-            setmeal:{}
+            setmeal:{},
+            backend_url: "http://localhost:85",
+            qiniu_domain_url: "http://qfxjrk1lr.hd-bkt.clouddn.com/"
         },
         methods:{
             toOrderInfo(){
@@ -91,10 +93,10 @@
             }
         },
         mounted(){
-            axios.post("/setmeal/findById.do?id=" + id).then((response) => {
+            axios.post(this.backend_url + "/setmeal/findDetailsById.do?id=" + id).then((response) => {
                 if(response.data.flag){
                     this.setmeal = response.data.data;
-                    this.imgUrl = 'http://pqjroc654.bkt.clouddn.com/' + this.setmeal.img;
+                    this.imgUrl = this.qiniu_domain_url + this.setmeal.img;
                 }
             });
         }

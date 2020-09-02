@@ -32,4 +32,12 @@ public class SetmealController {
         log.debug(setmealList.toString());
         return new Result(true, MessageConst.QUERY_SETMEALLIST_SUCCESS, setmealList);
     }
+    @RequestMapping("/findDetailsById")
+    public Result findDetailsById(Integer id){
+        log.debug("SetmealController:findDetailById: " + id);
+        Setmeal setmeal = setmealService.findDetailById(id);
+        log.debug("查询套餐详情成功");
+        log.debug(setmeal.toString());
+        return new Result(true,MessageConst.QUERY_SETMEAL_SUCCESS,setmeal);
+    }
 }
