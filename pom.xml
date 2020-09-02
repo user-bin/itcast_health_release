@@ -17,12 +17,13 @@
         <module>health_job</module>
         <module>health_mobile_backend</module>
         <module>health_mobile_web</module>
+        <module>health_sms_service_provider</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
         <servlet-api.version>2.5</servlet-api.version>
         <jsp-api.version>2.2</jsp-api.version>
         <!--C标签： c:if ，c:foreach-->
