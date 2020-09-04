@@ -95,4 +95,9 @@ public class OrderServiceImpl implements OrderService{
         orderSettingDao.editReservationsByOrderDate(orderSetting);
         return new Result(true, MessageConst.ORDER_SUCCESS,order);
     }
+
+    @Override
+    public Map<String, Object> findById(Integer id) {
+        return orderDao.findById(id);
+    }
 }

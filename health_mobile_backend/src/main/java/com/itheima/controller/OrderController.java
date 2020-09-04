@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -48,5 +50,17 @@ public class OrderController {
         }
         log.debug(MessageConst.ORDER_SUCCESS);
         return result;
+    }
+
+    @RequestMapping("/findById")
+    public Result findById(Integer id){
+        log.debug("OrderController: findById: " + id);
+        Map<String ,Object> map =  orderService.findById(id);
+        Date orderDate = (Date) map.get("orderDate");
+        String orderDateStr = new SimpleDateFormat("yyyy-MM-dd").format(orderDate);
+        map.put("orderDate", orderDateStr);
+        log.debug("查询预约信息成功！！");
+        log.debug(map.toString());
+        return new Result(true,MessageConst.QUERY_ORDER_SUCCESS, map);
     }
 }

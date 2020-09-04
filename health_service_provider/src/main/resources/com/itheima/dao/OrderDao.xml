@@ -32,4 +32,20 @@
             </if>
         </where>
     </select>
+
+    <select id="findById" parameterType="int" resultType="map">
+        SELECT
+        m. NAME member,
+        o.orderDate,
+        o.orderType,
+        s. NAME setmeal
+        FROM
+        t_order o,
+        t_member m,
+        t_setmeal s
+        WHERE
+        o.member_id = m.id
+        AND o.setmeal_id = s.id
+        AND o.id = #{id}
+    </select>
 </mapper>
