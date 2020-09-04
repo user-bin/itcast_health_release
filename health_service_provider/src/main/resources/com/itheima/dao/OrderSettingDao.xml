@@ -24,4 +24,9 @@
         select * from t_ordersetting where
         orderDate BETWEEN #{param1} and #{param2}
     </select>
+    <!--更新已预约人数-->
+    <update id="editReservationsByOrderDate" parameterType="orderSetting">
+        update t_ordersetting set reservations = #{reservations} where orderDate = #{orderDate}
+    </update>
+
 </mapper>
