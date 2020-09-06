@@ -11,4 +11,6 @@ public interface MemberDao {
     Member findByTelephone(String telephone);
 
     void add(Member member);
+
+    long findCountBeforeByDate(String lastDay);
 }
