@@ -17,6 +17,16 @@
                           http://www.springframework.org/schema/security/spring-security.xsd">
 
     <!--
+      http：用于定义相关权限控制
+      指定哪些资源不需要进行权限校验，可以使用通配符
+    -->
+    <!--对 /favicon.ico 资源放行-->
+    <security:http pattern="/favicon.ico" security="none"></security:http>
+    <!--对静态资源放行-->
+    <security:http pattern="/js/**" security="none"></security:http>
+    <security:http pattern="/img/**" security="none"></security:http>
+    <security:http pattern="/css/**" security="none"></security:http>
+    <!--
         http：用于定义相关权限控制
         auto-config：是否自动配置
                         设置为true时框架会提供默认的一些配置，例如提供默认的登录页面、登出处理等
