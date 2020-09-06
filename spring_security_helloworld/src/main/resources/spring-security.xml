@@ -71,17 +71,8 @@
         <!--
             authentication-provider：认证提供者，执行具体的认证逻辑
         -->
-        <security:authentication-provider>
-            <!--
-                user-service：用于获取用户信息，提供给authentication-provider进行认证
-            -->
-            <security:user-service>
-                <!--
-                    user：定义用户信息，可以指定用户名、密码、角色，后期可以改为从数据库查询用户信息
-				  {noop}：表示当前使用的密码为明文
-                -->
-                <security:user name="admin"  password="{noop}admin" authorities="ROLE_ADMIN"></security:user>
-            </security:user-service>
-        </security:authentication-provider>
+        <security:authentication-provider user-service-ref="userService"></security:authentication-provider>
     </security:authentication-manager>
+
+    <bean id="userService" class="com.itheima.security.SpringSecurityUserService"></bean>
 </beans>
