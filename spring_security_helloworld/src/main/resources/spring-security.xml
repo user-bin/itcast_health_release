@@ -32,14 +32,18 @@
                         设置为false时需要显示提供登录表单配置，否则会报错
         use-expressions：用于指定intercept-url中的access属性是否使用表达式
     -->
-    <security:http auto-config="true" use-expressions="false">
+    <security:http auto-config="true" use-expressions="true">
         <!--
             intercept-url：定义一个拦截规则
             pattern：对哪些url进行权限控制
             access：在请求对应的URL时需要什么权限，默认配置时它应该是一个以逗号分隔的角色列表，
 				  请求的用户只需拥有其中的一个角色就能成功访问对应的URL
         -->
-        <security:intercept-url pattern="/**"  access="ROLE_ADMIN" />
+        <!--<security:intercept-url pattern="/**"  access="ROLE_ADMIN" />-->
+        <security:intercept-url pattern="/pages/a.html"  access="hasRole('ROLE_ADMIN')" />
+        <security:intercept-url pattern="/pages/b.html"  access="hasAnyAuthority('add','select')" />
+        <security:intercept-url pattern="/pages/c.html"  access="hasAnyAuthority('edit','ROLE_USER')" />
+        <security:intercept-url pattern="/pages/d.html"  access="hasAnyAuthority('ROLE_USER')" />
         <!--
             security:form-login: 对登录信息的配置
             username-parameter: 对应表单用户名的name属性值
