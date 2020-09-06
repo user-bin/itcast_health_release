@@ -1,30 +1,35 @@
 package com.itheima.controller;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.itheima.constant.MessageConst;
-import com.itheima.entity.Result;
-import com.itheima.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
 
-	@Reference
-	private UserService userService;
+	/**
+	 * 登录成功后访问的方法
+	 * 	登录成功以后： pages/main.html
+	 */
+	@RequestMapping("/loginSuccess")
+	public ModelAndView loginSuccess(){
+		log.debug("登录成功!!");
+		//在ModelAndView 中指定视图名称
+		//默认为请求转发
+		// 设置为重定向
+		return new ModelAndView("redirect:http://localhost:83/pages/main.html");
+	}
 
-	@RequestMapping("/login")
-	public Result login(String username, String password){
-		log.debug("oms backend,user:"+username+" ,password:"+password);
-		if(userService.login(username,password)){
-			log.debug("login ok!!!");
-			return new Result(true, MessageConst.ACTION_SUCCESS);
-		}else{
-			log.debug("login fail");
-			return new Result(false,MessageConst.ACTION_FAIL);
-		}
+	/**
+	 * 登录失败后访问的方法
+	 * 登录失败以后：跳转到登录页面, 重新登录, 提示登录失败
+	 */
+	@RequestMapping("/loginFail")
+	public ModelAndView loginFail(){
+		log.debug("登录失败!!");
+		return new ModelAndView("redirect:http://localhost:83/login.html");
 	}
 }
