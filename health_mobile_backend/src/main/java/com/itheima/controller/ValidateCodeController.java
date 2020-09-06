@@ -43,4 +43,18 @@ public class ValidateCodeController {
         return new Result(true, MessageConst.SEND_VALIDATECODE_SUCCESS);
     }
 
+
+    //手机号快速登录发送验证码
+    @RequestMapping("/send4Login")
+    public Result send4Login(String telephone){
+        String code = ValidateCodeUtils.generateValidateCode(6).toString();
+        log.debug("验证码：" + code);
+        //发送验证码到手机
+        validateCodeService.sendValidateCodeShortMessage(telephone, RedisMessageConstant.SENDTYPE_LOGIN, String.valueOf(code));
+        log.debug("发送验证码成功！！");
+        return new Result(true, MessageConst.SEND_VALIDATECODE_SUCCESS);
+    }
+
+
+
 }
