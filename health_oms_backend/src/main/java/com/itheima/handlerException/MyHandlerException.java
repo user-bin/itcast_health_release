@@ -6,6 +6,7 @@ import com.itheima.exception.BusinessRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,6 +28,13 @@ import javax.servlet.ServletException;
 @RestControllerAdvice
 @Slf4j
 public class MyHandlerException {
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(AccessDeniedException.class)
+    public Result handlerAccessDeniedException(AccessDeniedException e){
+        log.debug("error：" +e );
+        return new Result(false, "权限不足，请联系管理员或重新登录！！");
+    }
 
     /**
      * 处理手动抛出的运行时异常
