@@ -32,7 +32,14 @@
                 login-processing-url="/user/login.do"
                 authentication-success-forward-url="/user/loginSuccess.do"
                 authentication-failure-url="/user/loginFail.do" ></security:form-login>
-
+        <!--
+           logout：退出登录
+           logout-url：退出登录操作对应的请求路径
+           logout-success-url：退出登录后的跳转页面
+        -->
+        <security:logout logout-url="/logout.do"
+                         logout-success-url="http://localhost:83/login.html"
+                         invalidate-session="true"/>
 
         <!--关闭跨站请求伪造-->
         <security:csrf disabled="true"></security:csrf>
