@@ -23,9 +23,8 @@
     <!--对 /favicon.ico 资源放行-->
     <security:http pattern="/favicon.ico" security="none"></security:http>
     <!--对静态资源放行-->
-    <security:http pattern="/js/**" security="none"></security:http>
-    <security:http pattern="/img/**" security="none"></security:http>
-    <security:http pattern="/css/**" security="none"></security:http>
+    <security:http pattern="/pages/login.html" security="none"></security:http>
+    <security:http pattern="/pages/error.html" security="none"></security:http>
     <!--
         http：用于定义相关权限控制
         auto-config：是否自动配置
@@ -41,6 +40,28 @@
 				  请求的用户只需拥有其中的一个角色就能成功访问对应的URL
         -->
         <security:intercept-url pattern="/**"  access="ROLE_ADMIN" />
+        <!--
+            security:form-login: 对登录信息的配置
+            username-parameter: 对应表单用户名的name属性值
+            password-parameter：对应表单密码的name属性值
+            login-page： 指定登录页面 ，必须 / 开头
+            login-processing-url: 登录请求路径，也就是表单的action ，必须 / 开头
+            default-target-url： 登录成功 默认访问的页面 ，必须 / 开头
+            authentication-failure-url： 登录失败后跳转的页面，必须 / 开头
+        -->
+        <security:form-login
+                username-parameter="username"
+                password-parameter="password"
+                login-page="/pages/login.html"
+                login-processing-url="/login.do"
+                default-target-url="/pages/success.html"
+                authentication-failure-url="/pages/error.html"></security:form-login>
+
+        <!--
+          csrf：对应CsrfFilter过滤器
+          disabled：是否启用CsrfFilter过滤器，如果使用自定义登录页面需要关闭此项，否则登录操作会被禁用（403）
+        -->
+        <security:csrf disabled="true"></security:csrf>
     </security:http>
 
     <!--
