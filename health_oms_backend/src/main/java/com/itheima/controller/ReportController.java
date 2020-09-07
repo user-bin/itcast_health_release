@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.constant.MessageConst;
 import com.itheima.entity.Result;
 import com.itheima.service.MemberService;
+import com.itheima.service.ReportService;
 import com.itheima.service.SetmealService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -72,5 +73,18 @@ public class ReportController {
             e.printStackTrace();
             return new Result(false,MessageConst.ACTION_FAIL);
         }
+    }
+
+    @Reference
+    private ReportService reportService;
+    /**
+     * 获取运营统计数据
+     * @return
+     */
+    @RequestMapping("/getBusinessReportData")
+    public Result getBusinessReportData(){
+        Map<String,Object> result = reportService.getBussinessReport();
+        System.out.println("result:"+result);
+        return new Result(true,MessageConst.ACTION_SUCCESS, result );
     }
 }

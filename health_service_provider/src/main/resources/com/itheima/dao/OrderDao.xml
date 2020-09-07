@@ -48,4 +48,21 @@
         AND o.setmeal_id = s.id
         AND o.id = #{id}
     </select>
+
+
+    <select id="findTodayOrderNumber" parameterType="string" resultType="long">
+        select count(0 ) from t_order where orderDate = #{todayDate}
+    </select>
+
+    <select id="findTodayVisitsNumber" parameterType="string" resultType="long">
+        select count(0) from t_order where orderDate = #{todayDate} and orderStatus = '已到诊'
+    </select>
+
+    <select id="findOrderNumberByBetweenDate" resultType="long">
+        select count(0) from t_order where orderDate between #{param1} and #{param2}
+    </select>
+
+    <select id="findVisitsNumberByAfterDate" parameterType="string" resultType="long">
+        select count(0) from t_order where orderDate &gt;= #{date} and orderStatus = '已到诊'
+    </select>
 </mapper>

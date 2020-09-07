@@ -13,4 +13,24 @@ public interface MemberDao {
     void add(Member member);
 
     long findCountBeforeByDate(String lastDay);
+
+    /**
+     * 查询今日新增会员数
+     * @param todayDate
+     * @return
+     */
+    long findTodayNewMember(String todayDate);
+
+    /**
+     * 查询总会员数
+     * @return
+     */
+    long findTotalCount();
+
+    /**
+     * 指定日期之后的新增会员数
+     * @param date
+     * @return
+     */
+    long findCountByAfterDate(String date);
 }
