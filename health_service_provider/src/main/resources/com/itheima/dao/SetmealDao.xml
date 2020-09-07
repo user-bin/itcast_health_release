@@ -69,5 +69,16 @@
         select * from t_setmeal where id = #{id}
     </select>
 
-
+    <select id="findSetmealCount" resultType="java.util.Map">
+        SELECT
+        count(o.id)
+        value
+        ,
+        s. NAME name
+        FROM
+        t_order o
+        RIGHT JOIN t_setmeal s ON s.id = o.setmeal_id
+        GROUP BY
+        s.id
+    </select>
 </mapper>

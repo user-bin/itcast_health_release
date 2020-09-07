@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.JedisPool;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 黑马程序员
@@ -74,4 +75,9 @@ public class SetmealServiceImpl implements SetmealService {
         return setmealDao.findById(id);
     }
 
+
+    @Override
+    public List<Map<String, Object>> findSetmealCount() {
+        return setmealDao.findSetmealCount();
+    }
 }
